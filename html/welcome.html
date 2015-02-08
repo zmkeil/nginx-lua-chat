@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
+        <title>Document</title>
+
+        <!-- Latest compiled and minified CSS -->
+        <link href="http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+<!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"-->
+<!--link rel="stylesheet" href="/bootstrap.min.css"-->
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+<!-- 可选: 包含 jQuery 库 -->
+<script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+	<script>
+		$(document).ready(function(){
+			$("#appslist").load("/getAppList.do");
+		});
+	</script>
+
+
+</head>
+<body>
+
+<div class="container">
+	<div class="row clearfix" style="background-color: antiquewhite">
+		<div class="col-md-2 column">
+			<img alt="140x140" src="/logo.png" class="img-circle" />
+		</div>
+		<div class="col-md-1 column">
+		</div>
+		<div class="col-md-9 column">
+			<h1>
+				<em>&nbsp;&nbsp;&nbsp;&nbsp;多姿生活，请别辜负</em>
+			</h1>
+			<h1>
+				<em>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;精彩创意，欢迎分享</em>
+			</h1>
+		</div>
+	</div>
+	<div class="row clearfix">
+		<div class="col-md-2 column">
+			<h2>
+				涂鸦...
+			</h2>
+				<p>
+					&nbsp;&nbsp;&nbsp;&nbsp;我们热爱生活，我们努力使生活更加多彩，可惜我们只是程序员
+				</p>
+				<p>
+					&nbsp;&nbsp;&nbsp;&nbsp;我们有牛掰的二进制文件，它们静静躺在shell的暖床上；我们坐在电脑旁十指轮动，享受自我的精彩...
+				</p>
+				<p>
+					&nbsp;&nbsp;&nbsp;&nbsp;我们希望为更多人的生活增彩...
+				</p>
+			<p>
+				 <a class="btn" href="#">About »</a>
+			</p>
+		</div>
+		<div class="col-md-1 column">
+
+		</div>
+		<div class="col-md-9 column">
+			<div class="row clearfix">
+				<div class="col-md-8 column">
+					&nbsp;&nbsp;
+					<br/>
+					&nbsp;&nbsp;
+					<br/>
+					<p>
+						有任何问题，任何吐槽，任何...
+					</p>
+					<p>
+						欢迎联系我们：zhaomangzheng@163.com，分享您的精彩
+					</p>
+				</div>
+				<div class="col-md-4 column">
+					<canvas id = "clock" width = "260px" height = "120px">
+        <script type = "text/javascript">
+            var clock = document.getElementById("clock");
+            var cxt = clock.getContext("2d");
+            //显示数字时钟
+            function showTime(m, n) {
+                cxt.clearRect(0, 0, 260, 120);
+                var now = new Date;
+                var hour = now.getHours();
+                var min = now.getMinutes();
+                var sec = now.getSeconds();
+                var msec = now.getMilliseconds();
+                hour = hour >= 10 ? hour : "0" + hour;
+                min = min >= 10 ? min : "0" + min;
+                sec = sec >= 10 ? sec : "0" + sec;
+                msec = (msec >= 10 && msec < 100) ? ("0" + msec) : (msec >= 0 && msec < 10) ? ("00" + msec) : msec;
+                bdigital(m, n, hour);
+                bdigital(m + 85, n, min);
+                bdigital(m + 170, n, sec);
+
+                //两位数的显示
+                function bdigital(x, y, num) {
+                    var ge = num % 10;
+                    var shi = (parseInt(num / 10)) % 10;
+                    digital(x, y, shi);
+                    digital(x + 39, y, ge);
+                }
+                //画：
+                //小时与分钟之间
+                cxt.lineWidth = 5;
+                cxt.strokeStyle = "#000";
+                cxt.fillStyle = "#000";
+                cxt.beginPath();
+                cxt.arc(m + 77, n + 25, 0.2, 0, 360, false);
+                cxt.fill();
+                cxt.closePath();
+                cxt.stroke();
+                cxt.lineWidth = 5;
+                cxt.strokeStyle = "#000";
+                cxt.fillStyle = "#000";
+                cxt.beginPath();
+                cxt.arc(m + 77, n + 50, 0.2, 0, 360, false);
+                cxt.fill();
+                cxt.closePath();
+                cxt.stroke();
+                //分钟与秒之间
+                cxt.lineWidth = 5;
+                cxt.strokeStyle = "#000";
+                cxt.fillStyle = "#000";
+                cxt.beginPath();
+                cxt.arc(m + 165, n + 25, 0.2, 0, 360, false);
+                cxt.fill();
+                cxt.closePath();
+                cxt.stroke();
+                cxt.lineWidth = 5;
+                cxt.strokeStyle = "#000";
+                cxt.fillStyle = "#000";
+                cxt.beginPath();
+                cxt.arc(m + 165, n + 50, 0.2, 0, 360, false);
+                cxt.fill();
+                cxt.closePath();
+                cxt.stroke();
+            }
+            //显示一位数字
+            function digital(x, y, num) {
+                //设置风格
+                cxt.lineWidth = 1;
+                cxt.strokeStyle = "#000";
+                //a
+                function a() {
+                    cxt.beginPath();
+                    cxt.moveTo(x + 1, y);
+                    cxt.lineTo(x + 31, y);
+                    cxt.closePath();
+                    cxt.stroke();
+                }
+                //b
+                function b() {
+                    cxt.beginPath();
+                    cxt.moveTo(x + 32, y + 1);
+                    cxt.lineTo(x + 32, y + 34);
+                    cxt.closePath();
+                    cxt.stroke();
+                }
+                //c
+                function c() {
+                    cxt.beginPath();
+                    cxt.moveTo(x + 32, y + 36);
+                    cxt.lineTo(x + 32, y + 68);
+                    cxt.closePath();
+                    cxt.stroke();
+                }
+                //d
+                function d() {
+                    cxt.beginPath();
+                    cxt.moveTo(x + 31, y + 69);
+                    cxt.lineTo(x + 1, y + 69);
+                    cxt.closePath();
+                    cxt.stroke();
+                }
+                //e
+                function e() {
+                    cxt.beginPath();
+                    cxt.moveTo(x, y + 68);
+                    cxt.lineTo(x, y + 36);
+                    cxt.closePath();
+                    cxt.stroke();
+                }
+                //f
+                function f() {
+                    cxt.beginPath();
+                    cxt.moveTo(x, y + 34);
+                    cxt.lineTo(x, y + 1);
+                    cxt.closePath();
+                    cxt.stroke();
+                }
+                //g
+                function g() {
+                    cxt.beginPath();
+                    cxt.moveTo(x + 1, y + 35);
+                    cxt.lineTo(x + 31, y + 35);
+                    cxt.closePath();
+                    cxt.stroke();
+                }
+                //0
+                function zero() {
+                    a(); b(); c(); d(); e(); f();
+                }
+                //1
+                function one() {
+                    b(); c();
+                }
+                //2
+                function two() {
+                    a(); b(); d(); e(); g();
+                }
+                //3
+                function three() {
+                    a(); b(); c(); d(); g();
+                }
+                //4
+                function four() {
+                    b(); c(); f(); g();
+                }
+                //5
+                function five() {
+                    a(); c(); d(); f(); g();
+                }
+                //6
+                function six() {
+                    a(); c(); d(); e(); f(); g();
+                }
+                //7
+                function seven() {
+                    a(); b(); c();
+                }
+                //8
+                function eight() {
+                    a(); b(); c(); d(); e(); f(); g();
+                }
+                //9
+                function nine() {
+                    a(); b(); c(); d(); f(); g();
+                }
+                //数字n
+                function number(n) {
+                    switch (n) {
+                        case 0: zero(); break;
+                        case 1: one(); break;
+                        case 2: two(); break;
+                        case 3: three(); break;
+                        case 4: four(); break;
+                        case 5: five(); break;
+                        case 6: six(); break;
+                        case 7: seven(); break;
+                        case 8: eight(); break;
+                        case 9: nine(); break;
+                    }
+                }
+                number(num);
+            }
+            showTime(10, 30);
+            setInterval("showTime(10,30)", 1000);
+        </script>
+		
+				</div>
+			</div>
+			<div class="row clearfix">
+				<div class="col-md-12 column">
+					<br/>
+				</div>
+			</div>
+			<div class="row clearfix" style="background-color: antiquewhite;">
+				<div class="col-md-2 column">
+					<h2><em>TOPs</em></h2>
+				</div>
+				<div class="col-md-6 column">
+					<h2 class="text-center">介绍</h2>
+				</div>
+				<div class="col-md-4 column">
+					<h2 class="text-center">体验</h2>
+				</div>
+			</div>
+
+
+			<div class="row clearfix" id="appslist">
+
+			</div>
+		</div>
+	</div>
+</div>
+
+    <!-- JavaScript 放置在文档最后面可以使页面加载速度更快 -->
+
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+    <!-- 可选: 合并了 Bootstrap JavaScript 插件 -->
+    <!--script src="/bootstrap.js"></script-->
+        <!--script src="/bootstrap.min.js"></script-->
+        <!--script src="/npm.js"></script-->
+
+</body>
+</html>

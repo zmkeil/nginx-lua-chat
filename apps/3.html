@@ -1,0 +1,133 @@
+<!DOCTYPE html >
+<html > <head>    
+		<title>图片上传</title>    
+		<script src="jquery-1.4.1.js" type="text/javascript"></script>    
+		<script type="text/javascript">        
+			function fileSelected() {        
+				//当选择文件时先清空原有的div中，此方法是加载文件信息与进度条问题关键            
+				$("#messages").text("");            
+				a = 0;            
+				//获取文件集合            
+				var file = document.getElementById('fileToUpload').files;            
+				//获取文件各数            
+				var fileNum = document.getElementById("fileToUpload").files.length;            
+				for (var i = 0; i < fileNum; i++) {                
+					//读取图片信息                
+					showMsg(file[i], i);            
+				}        
+			}        
+//展示信息        
+function showMsg(file, i) {            
+	if (file) {            
+		//转化为kb和MB格式。文件的名字、大小、类型都是可以现实出来。                
+		var fileSize = 0;                
+		if (file.size > 1024 * 1024) {                    
+			fileSize = (Math.round(file.size * 100 / (1024 * 1024)) / 100).toString() + 'MB';                
+		}                
+		else {                    
+			fileSize = (Math.round(file.size * 100 / 1024) / 100).toString() + 'KB';                
+		}            
+	}            
+	//图片上传的是图片还是其他            
+	if (file.type.indexOf("image") == 0) {                
+		//拼接字符串                
+		var msg = "图片名称：" + file.name + "；图片大小：" + file.size + "；图片类型：" + file.type + "<br/><br/>";                
+		//如果是创建filereader对象                
+		var reader = new FileReader();                
+		reader.onload = function (e) {                    
+			// e.target.result 的返回结果就是本地图片的路径，同时创建进度条和现实信息                    
+			var imgStr = "<img src='" + e.target.result + "' width='200px' height='200'/><progress id='num" + i + "' ></progress><span id='" + i + "'></span><br/>";                     $("#messages").append(msg);                    
+			$("#messages").append(imgStr);                
+		};                
+		reader.readAsDataURL(file);            
+	}            
+	else {            
+		//如果是文件的                
+		var msg = "文件名称：" + file.name + "；文件大小：" + file.size + "；文件类型：" + file.type + "<br/><progress id='num" + i + "' ></progress><span id='" + i + "'></span><br/><br/>";                
+		$("#messages").append(msg);            
+	}        
+}        
+//全局变量a将是作为加载进度条的id值；        
+var a = 0;        
+var fileNum;        
+var file;        
+//单文件上传        
+function uploadFile1(a) {            
+	fileNum = document.getElementById("fileToUpload").files.length;           
+	file = document.getElementById('fileToUpload').files;            
+	//单文件上传显示是没有太大的问题，但是多文件上传就得考虑进度条的显示问了，            
+	//uploadProgress(evt) 事件是XMLHttpRequest Leve 2中新加的内容，可以直接用来            
+	//监听文件上传时文件的详情信息，但是多文件上传总是最后才会触发此事件，并且是            
+	//没有什么规律可言，那么就要处理使没上传一个文件就让他必须触发此事件。            
+	uploadFile(file[0]);        
+}        
+//多文件上传的独立方法        
+function uploadFile(file) {        
+	//创建FormData()对象            
+	var fd = new FormData();            
+	fd.append("author", "Shiv Kumar");            
+	fd.append("name", "Html 5 File API/FormData");            
+	//文件对象 file            
+	fd.append("fileToUpload", file);            
+	//准备使用ajax上传            
+	var xhr = new XMLHttpRequest();            
+	//进度条            
+	xhr.upload.addEventListener("progress", uploadProgress, false);            
+	//下载            
+	xhr.addEventListener("load", uploadComplete, false);            
+	//错误信息            
+	xhr.addEventListener("error", uploadFailed, false);            
+	//取消，此功能没有做            
+	xhr.addEventListener("abort", uploadCanceled, false);            
+	//上传            
+	xhr.open("POST", "dox_uploadFile.do");            
+	//发送            
+	xhr.send(fd);        
+}
+
+//进度条显示        
+function uploadProgress(evt) {        
+	//判断a有没有超出范围            
+	if (a < fileNum && a != fileNum) {                
+		//此处的evt就是文件上传的所有信息。                
+		//evt.lengthComputable,文件是否是空                
+		if (evt.lengthComputable) {                    
+			//evt.loaded：文件上传的大小   evt.total：文件总的大小                    
+			var percentComplete = Math.round((evt.loaded) * 100 / evt.total);                    
+			//加载进度条，同时显示信息                    
+			document.getElementById("" + a + "").innerHTML = percentComplete.toString() + '%';                    
+			document.getElementById("num" + a + "").value = percentComplete / 100;                    
+			//如果上传的结果是100时才让加载下一个文件。如果不够100会继续上传原来的文档。                    
+			if (percentComplete == 100) {                        
+				a++;                        
+				//加载下一个文档                        
+				uploadFile(file[a])                    
+			}                
+		}
+
+	} ////  else { ////document.getElementsByName('progressNumber').innerHTML = 'unable to compute'; ////            }
+}
+function uploadComplete(evt) {         }
+function uploadFailed(evt) {             alert("上传失败.");         }
+function uploadCanceled(evt) {             alert("取消.");         }     
+</script>
+</head>
+
+
+<body>    
+	<form id="upload" action="fileUpload.ashx" method="post" enctype="multipart/form-data">    
+		<input type="hidden" id="_viewstate" value="-1" />    
+		<div>        
+			　　<label for="fileselect">           
+				请选择文件</label>        
+			<input type="file" multiple="mulitple" name="fileselect[]" id="fileToUpload" onchange="fileSelected();" />    
+		</div>       
+		<div id="messages" style="border: 1px red solid">         
+			<p>
+			文件信息:</p>    
+		</div>    
+		<input type="button" value="上传" onclick="uploadFile1()" />    
+	</form>
+</body>
+
+</html>

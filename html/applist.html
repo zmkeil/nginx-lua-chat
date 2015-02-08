@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
+		<title>Document</title>
+
+		<!-- Latest compiled and minified CSS -->
+		<link href="http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+		<!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"-->
+		<!--link rel="stylesheet" href="/bootstrap.min.css"-->
+
+		<!-- Optional theme -->
+		<!--link rel="stylesheet" href="/bootstrap-theme.min.css"-->
+
+	<script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+
+	<script>
+		$(document).ready(function(){
+			$(".btn-new-page").click(loadbody);
+
+			$("#body").load("/getAppList.do");
+		});
+
+		function loadbody() {
+			e = e||window.event;
+			var src = e.srcElement||e.target;
+			var id = src.id;
+			$.get("/getAppList.do",
+			function(data,status) {
+				if(status=="success") {
+					$("#body").html(data);
+				} 
+				else {
+					alert("reflash apps list failed");
+				}
+			});
+
+		}
+	</script>
+
+
+	</head>
+	<body>
+
+		<input type="button" id="w" class="headerbtn" onclick="loadbody();" value="reflash"></input>
+		<div class="container">
+			<div class="row clearfix" id="body">
+
+			</div>
+		</div>
+
+
+
+    <!-- 可选: 包含 jQuery 库 -->
+	<script src="http://cdn.bootcss.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+	
+	    <!-- 可选: 合并了 Bootstrap JavaScript 插件 -->
+		<!--script src="/bootstrap.js"></script-->
+		<!--script src="/bootstrap.min.js"></script-->
+		<!--script src="/npm.js"></script-->
+		
+	</body>
+</html>

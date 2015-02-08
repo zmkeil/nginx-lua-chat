@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	
+	<!-- Latest compiled and minified CSS -->
+        <link href="http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+<!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"-->
+<!--link rel="stylesheet" href="/bootstrap.min.css"-->
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="/bootstrap-theme.min.css">
+    <!-- 可选: 包含 jQuery 库 -->
+    <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+	
+<script>
+
+	$(document).ready(function(){
+		var url = document.URL;
+		var patt = new RegExp('again');
+		if (patt.test(url)) {
+			var again_tip=document.getElementById("again_tip");   
+			again_tip.style.visibility='visible';   	
+		}
+	});
+
+function login()
+{
+
+	var username=document.getElementById("username");
+
+	var pass=document.getElementById("password");
+	if(username.value=="")
+	{
+		alert("请输入用户名");
+		username.focus();
+		return;
+	}
+	if(pass.value=="")
+	{
+		alert("请输入密码");
+		return;
+	}
+return true;
+}
+
+function r(){  
+  var div1=document.getElementById("register_page");   
+  div1.style.visibility='visible';   
+} 
+
+function checkname(){ 
+	var div = document.getElementById("lr_uname_error"); 
+	div.innerHTML = ""; 
+	var name1 = document.register_form.lr_uname.value; 
+	if (name1.length == 0) { 
+		div.innerHTML = "用户名不能为空！"; 
+		//        document.register_form.lr_uname.focus(); 
+		return false; 
+	} 
+	if (name1.length < 4 || name1.length > 16) { 
+		div.innerHTML = "姓名输入的长度4-16个字符！"; 
+		//        document.register_form.lr_uname.select(); 
+		return false; 
+	} 
+	var charname1 = name1.toLowerCase(); 
+	for (var i = 0; i < name1.length; i++) { 
+		var charname = charname1.charAt(i); 
+		if (!(charname >= 0 && charname <= 9) && (!(charname >= 'a' && charname <= 'z')) && (charname != '_')) { 
+			div.innerHTML = "姓名包含非法字母，只能包含字母，数字，和下划线"; 
+			//                document.register_form.lr_uname.select(); 
+			return false; 
+		} 
+	} 
+	return true;
+}
+
+function checkEmail(env){ 
+	if (env == 1) {
+		//	alert("login");
+		var div = document.getElementById("lr_lemail_error"); 
+		var email = document.login_form.lr_lemail.value; 
+		} else {
+		var div = document.getElementById("lr_remail_error"); 
+		var email = document.register_form.lr_remail.value; 
+	}
+
+	div.innerHTML = ""; 
+
+	var sw = email.indexOf("@", 0); 
+	var sw1 = email.indexOf(".", 0); 
+	var tt = sw1 - sw; 
+	if (email.length == 0) { 
+		div.innerHTML = "电子邮件不能位空"; 
+		//        document.register_form.lr_remail.focus(); 
+		return false; 
+	} 
+	if (email.indexOf("@", 0) == -1) { 
+		div.innerHTML = "电子邮件格式不正确，必须包含@符号！"; 
+		//        document.register_form.lr_remail.select(); 
+		return false; 
+	} 
+	if (email.indexOf(".", 0) == -1) { 
+		div.innerHTML = "电子邮件格式不正确，必须包含.符号!"; 
+		//        document.register_form.lr_remail.select(); 
+		return false; 
+	} 
+	if (tt == 1) { 
+		div.innerHTML = "邮件格式不对。@和.不可以挨着！"; 
+		//        document.register_form.lr_remail.select(); 
+		return false; 
+	} 
+	if (sw > sw1) { 
+		div.innerHTML = "电子邮件格式不正确，@符号必须在.之前"; 
+		//        document.register_form.lr_remail.select(); 
+		return false; 
+	} 
+	else { 
+		return true; 
+	}
+
+	return ture; 
+}
+
+function check(){ 
+	if (checkEmail() && checkname()) { 
+		return true; 
+	} 
+	else { 
+		return false; 
+	} 
+} 						
+
+function exform(index) {
+	var f =  document.getElementsByTagName("form")[index];
+	f.action = f.action + location.search;
+	var whichform;
+	if (index == 0) {
+		whichform = 1
+	}
+	return checkEmail(whichform);
+}
+
+</script>
+</head>
+<body>
+
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-4 column">
+		</div>
+		<div class="col-md-8 column">
+			<div class="row clearfix">
+				<br/><br/>
+				<div class="col-md-12 column">
+					<p id="again_tip" style="visibility:hidden;color:red">This email not registered, try again</p>
+					<form name="login_form" method="post" action="/login.do"> <!--onsubmit="return checkEmail(1)"   not used -->
+					<table  width="350" bgcolor="#ccffcc" style="border-color" border="1">
+                     <tr align=center>
+					<td>用户名</td><td><input type="text" name="lr_lemail"  id="lr_lemail" value="your email" style="color: #999"
+						onclick="if(value==defaultValue){value='';this.style.color='#000'}" 
+						onBlur="if(!value){value=defaultValue;this.style.color='#999'}">
+						<br/>
+						<div id="lr_lemail_error" style="display:inline;color: red;"></div>
+					</td>
+					</tr>
+                     <tr align=center><td>密 码</td><td><label for="">NO passwd, have fun</label><!--input type="password" name="password" id="password"--></td></tr>
+                     <tr align=center><td>验证码</td><td><label for="">Please Ignore It</label><!--input type="text" name="yanzheng"--></td></tr>
+                     <tr align=center><td colspan="2"><input type="submit" value="登 录" onclick="return exform(0)"/>     
+							<input type="reset" value="重 置"/>
+							<input type="button" value="还未注册" onclick="r();"/></td></tr>                   
+					</table>
+				</form>
+				</div>
+			</div>
+
+			
+			<br/><br/><br/>
+			<div class="row clearfix" style="visibility:hidden;" id="register_page">
+				<div class="col-md-12 column">
+					<h2>Register</h2>
+				    <form name="register_form" method="post" action="2.html" onsubmit="return check()"> 
+                        <table> 
+								<tr> 
+                                        <td> 
+                                                电子邮件地址： 
+                                        </td> 
+                                        <td> 
+                                                <input id="lr_remail" type="text" name="lr_remail" onblur="check()"> 
+                                                <div id="lr_remail_error" style="display:inline;color: red;"> 
+                                                </div> 
+                                        </td> 
+                                </tr> 	
+                                <tr> 
+                                        <td> 
+                                                用户名： 
+                                        </td> 
+                                        <td> 
+                                                <input id="lr_uname" type="text" name="lr_uname" onblur="check()"> 
+                                                <div id="lr_uname_error" style="display:inline;color: red;"> 
+                                                </div> 
+                                        </td> 
+                                </tr> 
+                                <tr> 
+                                        <td> 
+                                                密码： 
+                                        </td> 
+                                        <td> 
+                                                <label for="">NO passwd need</label>
+                                        </td> 
+                                </tr> 
+                                <tr> 
+                                        <td> 
+                                                确认密码： 
+                                        </td> 
+                                        <td> 
+                                                <label for="">Have Fun</label>
+                                        </td> 
+                                </tr> 
+								<tr style="visibility:hidden;" id="lr_rcode_page"> 
+                                        <td> 
+                                                验证码： 
+                                        </td> 
+                                        <td> 
+                                                <input id="lr_rcode" type="text" name="lr_rcode" onblur="checkrcode()"> 
+												<div id="lr_uname_error" style="display:inline"> 请在5分钟内登录邮箱，输入验证码 
+                                                </div> 
+                                        </td> 
+                                </tr> 
+                                
+                                <tr align=center> 
+                                        <td> 
+                                                <input type="submit" value="提交">
+												<input type="reset" value="重置">&nbsp;&nbsp;&nbsp;
+												<input type="submit" value="激活"> 
+                                        </td> 
+                                </tr> 
+                        </table> 
+					</form> 
+				</div>
+			</div>
+		</div>
+		
+		
+	</div>
+</div>
+
+	    <!-- JavaScript 放置在文档最后面可以使页面加载速度更快 -->
+
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+    <!-- 可选: 合并了 Bootstrap JavaScript 插件 -->
+    <!--script src="/bootstrap.js"></script-->
+        <!--script src="/bootstrap.min.js"></script-->
+        <!--script src="/npm.js"></script-->
+	
+</body>
+</html>

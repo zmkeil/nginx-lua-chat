@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta content="width=device-width, initial-scale=1.0" charset="UTF-8">
+	<title>Document</title>
+	
+	        <!-- Latest compiled and minified CSS -->
+        <link href="http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+<!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"-->
+<!--link rel="stylesheet" href="/bootstrap.min.css"-->
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="/bootstrap-theme.min.css">
+    <!-- 可选: 包含 jQuery 库 -->
+    <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+    <script src="/jquery.form.js"></script>
+
+	<script>
+		$(document).ready(function(){
+			var backurl = window.location;
+			$("#vistor").load("/getVistor.do?backurl="+backurl);
+			$("#dox_filelist").load("/dox_getFileList.do?backurl="+backurl);
+
+		});
+
+		function uploadSubmit() {
+
+			function showResponse(msg) {
+				alert(msg);
+			}
+
+			var uploadFormOptions = {
+				type : 'post',
+				url : "/dox_uploadFile.do",
+				//	beforeSubmit : ,
+				success : showResponse,
+				error : function(XMLResponse) {
+					alert('upload error');
+				}
+			};
+
+			try {
+				$("#dox_upload").ajaxSubmit(uploadFormOptions);
+			} catch(e) {alert('submit: '+e.message);}
+
+			var backurl = window.location;
+			$("#dox_filelist").load("/dox_getFileList.do?backurl="+backurl);
+		}
+
+	</script>
+
+</head>
+<body>
+
+	<div class="container">
+	<div class="row clearfix" style="
+    background-color: blanchedalmond;
+    padding-bottom: 10px;
+	padding-top: 10px;">
+		<div class="col-md-10 column">
+			<h1 class="text-center">DOX存储</h1>
+		</div>
+		<div class="col-md-2 column">
+			<table>
+				<br/>
+				<tr>
+					<td id="vistor" style="font-size: large;"></td>
+				</tr>
+			</table>
+		</div>		
+	</div>
+	<div class="row clearfix" style="height: 400px;">
+		<div class="col-md-3 column">
+			<h2>
+				文件列表
+			</h2>
+			<div id="dox_filelist">
+			</div>
+		</div>
+		<div class="col-md-5 column" style="
+    padding-left: 10px;
+    padding-right: 10px;">
+			<h2>Select files to upload</h2>
+			<form name="dox_upload" id="dox_upload" method="POST" enctype="multipart/form-data" 
+				style="background-color: darkgray;"> 
+
+				<input type="file" name="file1"><br>
+				<input type="button" name="submitbutton" value="Upload" onclick="uploadSubmit()">
+			</form>
+			<br/>
+			
+			<h2>下载 </h2>
+			<div style="background-color: darkgray;">
+				<label id="dox_filename" style="font-size: xx-large;">NAME</label><br/>
+				<label id="dox_fileurl" style="font-size: xx-large;">URL</label>
+			</div>			
+		</div>
+		<div class="col-md-4 column" style="
+					background-color: cadetblue;">
+			<h2>
+				About
+			</h2>
+			<p>
+				这是一个简单的网络存储系统，做这个玩意最初是因为，本人一般都是远程登录Linux服务器操作，也没有任何图形界面，纯命令行工作。而且服务器设置了网络隔离（主要防止dump服务器的数据，结果双向都封了），无法直接通过secureCRT rz来传递本地文件。
+			</p>
+			<p>这样就带来一个问题，很多时候，服务器上需要一些文件资源。幸运的是服务器可以连互联网，万能的互联网解决了大部分问题。</p>
+			<p>但还是有些资源，都要通过各种插件才能下载，直接wget根本下不来；而且确实有些资源互联网上也没有。</p>
+			<p>于是做了这玩意，先在windows上准备好文件，上传到这个网站上，再从服务器上wget一下。</p>
+			<p>哈哈！纯属娱乐，目前只用个别同学使用</p>
+			<p>
+				 <a class="btn" href="#">View details »</a>
+			</p>
+		</div>
+	</div>
+	<br/><br/>
+	<div class="row clearfix">
+		<div class="col-md-3 column">
+			<h2>筑楼版</h2>
+			<p>任何鄙视、任何批评、任何吐槽、任何围观、任何建议、任何好评、任何赞扬...
+			</p>
+			<p>都请留下您的一片砖，建设我们共有的楼！</p>
+			
+			<textarea id="filecontent" cols="65" rows="10" type="text" style="margin: 0px; width: 100%; height: 50%;" charset="utf-8"></textarea>
+			<br/>
+            <input type="button" value="走你！筑楼" onclick="dox_zl();">
+		</div>
+		<div class="col-md-1 column">
+		</div>
+		<div class="col-md-4 column">
+		</div>
+		<div class="col-md-4 column">
+		</div>
+	</div>
+</div>
+	
+	    <!-- JavaScript 放置在文档最后面可以使页面加载速度更快 -->
+
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+    <!-- 可选: 合并了 Bootstrap JavaScript 插件 -->
+    <!--script src="/bootstrap.js"></script-->
+        <!--script src="/bootstrap.min.js"></script-->
+        <!--script src="/npm.js"></script-->
+
+</body>
+</html>

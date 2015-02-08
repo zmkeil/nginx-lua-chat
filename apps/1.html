@@ -1,0 +1,48 @@
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+		<script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+		<script src="/jquery.form.js"></script>
+
+		<script>
+			$(document).ready(function(){
+				$('#formUpload').unbind ();
+				var uploadOptions={
+				//	target:'#dialogUpload',
+					type: 'post',
+					enctype:'multipart/form-data',
+					url: '/dox_uploadFile.do',
+					success:renewUpload,
+					clearForm:true
+				};
+				$('#formUpload').submit(function(){
+					try {
+						$('#formUpload').ajaxSubmit(uploadOptions);
+					} catch(e) {alert('submit: '+e.message);}
+
+					return false;
+				});
+			});
+			</script>
+		</head>
+
+
+	<body>
+
+		<form id="formUpload" method="post"> 
+			<input name="attachmentType" type="hidden" value="income"/>
+			<input id="itemid" name="itemid" type="hidden" value=""/>
+			<p><button id="uploadButton" type="submit">上传</button>
+			<input type="file" name="file" id="file" title="仅限图片和常用文档格式，文件最大不可以超过2M,图片建议500kb以下为宜"/>
+			</p>
+		</form>
+
+	</body>
+</html>
+
+
+
+
