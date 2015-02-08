@@ -7,4 +7,5 @@ local enc = xcode:xxencode(t)
 print(enc)
 
 local dec = xcode:xxdecode(enc)
+
 print(dec.name, dec.time)
