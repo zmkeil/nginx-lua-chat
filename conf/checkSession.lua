@@ -4,11 +4,19 @@
 local _M = { _VERSION = '0.08' }
 
 local mt = { __index = _M }
+local BS_HEAD = "checkLogin: "
 
-function _M.new(self, db)
+function _M.new(self)
+	local bs_upsql = require "bs_upsql"
+
+	local wrapdb = bs_upsql:new("binshared")
+	if not wrapdb then
+		ngx.log(ngx.ERR, BS_HEAD, "connect DB error")
+		return nil
+	end
 
 	return setmetatable({
-		db = db,
+		wrapdb = wrapdb,
 		expired_time = 60
 	}, mt)
 end
@@ -82,31 +90,28 @@ end
 		
 
 function _M.updateLoginTime(self, name)
-	local db = self.db
+	local db = self.wrapdb
 	local time = ngx.time()
 	local loginUsers = ngx.shared.loginUsers
 	local lasttime = loginUsers:get(name)
+	local res
 	if lasttime then
-		queryline = "update login_users set logintime="..time.." where name=\""..name.."\""
+		res = db:update("login_users", {logintime=time}, {name=name})
 	else
-		queryline = "select logintime from login_users where name=\""..name.."\""
-		res, err, errno, sqlstate = db:query(queryline)
-		if not res then
-			ngx.log(ngx.ERR, "bad result #1: ", err, ": ", errno, ": ", sqlstate, ".")
-			return nil, "db error"
+		local ures = db:select("login_users", "logintime", {name=name})
+		if not ures then
+			return nil, BS_HEAD.."get login_time error"
 		end
-		if res[1] and res[1].logintime then
-			queryline = "update login_users set logintime="..time.." where name=\""..name.."\""
-			lasttime = res[1].logintime
+
+		if ures[1] and ures[1].logintime then
+			res = db:update("login_users", {logintime=time}, {name=name})
 		else
-			queryline = "insert into login_users value("..uid..",\""..name.."\","..time..")"
+			res = db:insert("login_users", {uid=uid,name})
 		end
 	end
 
-	res, err, errno, sqlstate = db:query(queryline)
 	if not res then
-		ngx.log(ngx.ERR, "bad result #1: ", err, ": ", errno, ": ", sqlstate, ".")
-		return ngx.exit(500)
+		return nil, BS_HEAD.."update time error"
 	end
 	loginUsers:set(name,time)
 

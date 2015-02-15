@@ -1,7 +1,4 @@
-local mysql = require "resty.mysql"
 local checkSession = require "checkSession"
-local db = mysql:new()
-
 
 -- get name
 ngx.req.read_body()
@@ -23,21 +20,12 @@ end
 
 
 -- check name, and set Cookie
-local ok, err, errno, sqlstate = db:connect({
-    host = "127.0.0.1",
-    port = 3306,
-    database = "binshared",
-    user = "admin",
-    password = "123"})
+local sessionL = checkSession:new()
 
-local sessionL = checkSession:new(db)
+local res = sessionL.wrapdb:select("uic","name,uid",{email=lr_email})
 
-local res, err, errno, sqlstate
-local queryline = "select * from uic where email=\""..lr_email.."\""
-
-res, err, errno, sqlstate = db:query(queryline)
 if not res then
-	ngx.log(ngx.ERR, "bad result #1: ", err, ": ", errno, ": ", sqlstate, ".")
+	ngx.log(ngx.ERR, "user not registered")
 	return ngx.exit(500)
 else
 	local row, name, uid
@@ -51,6 +39,7 @@ else
 	else
 		local time, err = sessionL:updateLoginTime(name)
 		if not time then
+			ngx.log(ngx.ERR, err)
 			ngx.exit(500)
 		end
 		
